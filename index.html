@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Processor</title>
+    <style>
+        #drop_area {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #aaa;
+            text-align: center;
+            line-height: 180px;
+        }
+        #download_button {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="drop_area">Drop files here</div>
+    <button id="download_button" onclick="downloadProcessedFile()">Download Processed File</button>
+
+    <script>
+        const dropArea = document.getElementById('drop_area');
+        const downloadButton = document.getElementById('download_button');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            ([...files]).forEach(uploadFile);
+        }
+
+        function uploadFile(file) {
+            let url = 'YOUR_N8N_ENDPOINT_HERE';
+            let formData = new FormData();
+            formData.append('file', file);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    downloadButton.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Upload failed:', error);
+            });
+        }
+
+        function downloadProcessedFile() {
+            // Implement download logic here, maybe point to another n8n endpoint to fetch the processed file
+        }
+    </script>
+</body>
+</html>
