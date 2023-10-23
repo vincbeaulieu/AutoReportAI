@@ -58,7 +58,12 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     downloadButton.style.display = 'block';
@@ -68,6 +73,7 @@
                 console.error('Upload failed:', error);
             });
         }
+
 
         function downloadProcessedFile() {
             // Implement download logic here, maybe point to another n8n endpoint to fetch the processed file
