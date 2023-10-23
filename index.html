@@ -3,118 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Processor</title>
-    <style>
-        #drop_area {
-            width: 300px;
-            height: 200px;
-            border: 2px dashed #aaa;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            background-color: #2D2D2D; /* This line sets the background to dark grey */
-            color: #fff; /* This line changes the text color to white for better contrast */
-        }
-
-        #file_display {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        #remove_file {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            cursor: pointer;
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 2px 5px;
-        }
-    </style>
+    <title>Drag & Drop File Uploader</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="drop_area">
-        Drop files here
-        <div id="file_display">
-            <span id="file_icon">📄</span> <span id="file_name"></span>
-        </div>
-        <button id="remove_file" onclick="removeFile()">X</button>
+    <div id="dropArea" class="dropzone">
+        <p>Drag & Drop File Here</p>
     </div>
-    <button id="submit_button" onclick="uploadFile()">Submit</button>
-    
-    <script>
-        const dropArea = document.getElementById('drop_area');
-        const fileDisplay = document.getElementById('file_display');
-        const fileNameElement = document.getElementById('file_name');
-        const removeFileButton = document.getElementById('remove_file');
-        let selectedFile = null;
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        dropArea.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            let dt = e.dataTransfer;
-            selectedFile = dt.files[0];
-            displaySelectedFile(selectedFile);
-        }
-
-        function displaySelectedFile(file) {
-            if (file) {
-                dropArea.textContent = ''; // Clear existing text
-                fileNameElement.textContent = file.name;
-                fileDisplay.style.display = 'block'; // Show the file info
-                removeFileButton.style.display = 'block'; // Show remove button
-            }
-        }
-
-        function removeFile() {
-            selectedFile = null;
-            fileDisplay.style.display = 'none'; // Hide the file info
-            removeFileButton.style.display = 'none'; // Hide remove button
-            dropArea.textContent = 'Drop files here';
-        }
-
-        function uploadFile() {
-            if (!selectedFile) {
-                alert('No file selected!');
-                return;
-            }
-
-            let url = 'https://vinc.app.n8n.cloud/webhook/1419d5b1-5a0d-4477-a4c9-7500e79a6bac';
-            let formData = new FormData();
-            formData.append('file', selectedFile);
-
-            fetch(url, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('File uploaded successfully!');
-                } else {
-                    alert('File upload failed.');
-                }
-            })
-            .catch(error => {
-                console.error('Upload failed:', error);
-            });
-        }
-    </script>
+    <button id="submitBtn" disabled>Submit</button>
+    <script src="script.js"></script>
 </body>
 </html>
