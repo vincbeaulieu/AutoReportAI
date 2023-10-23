@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +13,13 @@
             text-align: center;
             line-height: 180px;
         }
+
         #download_button {
             display: none;
         }
     </style>
 </head>
+
 <body>
     <div id="drop_area">Drop files here</div>
     <button id="download_button" onclick="downloadProcessedFile()">Download Processed File</button>
@@ -47,7 +50,7 @@
         }
 
         function uploadFile(file) {
-            let url = 'https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac';
+            let url = 'https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac'; // Your n8n webhook URL
             let formData = new FormData();
             formData.append('file', file);
 
@@ -71,6 +74,5 @@
         }
     </script>
 </body>
+
 </html>
-
-
