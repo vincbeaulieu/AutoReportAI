@@ -14,14 +14,13 @@
             position: relative;
         }
         #file_info {
-            display: none;
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
         }
-        #file_info span {
+        #file_name {
             display: block;
             margin: 0 auto;
             text-align: center;
@@ -38,7 +37,7 @@
 <body>
     <div id="drop_area">
         Drop files here
-        <div id="file_info">
+        <div id="file_info" style="display:none;">
             <span id="file_name"></span>
             <span id="remove_file">X</span>
         </div>
@@ -53,7 +52,6 @@
         const submitButton = document.getElementById('submit_button');
         let selectedFile = null;
 
-        // Prevent default drag behaviors
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropArea.addEventListener(eventName, preventDefaults, false);
         });
