@@ -44,13 +44,16 @@ function displayFileIcon() {
 submitBtn.addEventListener('click', () => {
     const formData = new FormData();
     formData.append('file', uploadedFile);
-    fetch('https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac', {
+    let url = 'https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac'
+    fetch(url, {
         method: 'POST',
         body: formData
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            return response.text().then(text => {
+                throw new Error(`Server responded with status ${response.status}: ${text}`);
+            });
         }
         return response.json();
     })
@@ -59,7 +62,7 @@ submitBtn.addEventListener('click', () => {
         alert('File uploaded successfully!');
     })
     .catch(error => {
-        console.log('There was a problem with the fetch operation:', error.message);
+        console.log('Error:', error.message);
         alert('Error uploading file: ' + error.message);
     });
 });
