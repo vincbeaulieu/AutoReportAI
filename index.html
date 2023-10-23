@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,21 +11,34 @@
             border: 2px dashed #aaa;
             text-align: center;
             line-height: 180px;
+            position: relative;
         }
-
-        #download_button {
+        #file_name {
             display: none;
+        }
+        #remove_file {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
-
 <body>
-    <div id="drop_area">Drop files here</div>
-    <button id="download_button" onclick="downloadProcessedFile()">Download Processed File</button>
+    <div id="drop_area">
+        Drop files here
+        <div id="file_name"></div>
+        <span id="remove_file">X</span>
+    </div>
+    <button id="submit_button" onclick="uploadFile(selectedFile)" disabled>Submit</button>
 
     <script>
         const dropArea = document.getElementById('drop_area');
-        const downloadButton = document.getElementById('download_button');
+        const fileNameDiv = document.getElementById('file_name');
+        const removeFileBtn = document.getElementById('remove_file');
+        const submitButton = document.getElementById('submit_button');
+        let selectedFile = null;
 
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropArea.addEventListener(eventName, preventDefaults, false);
@@ -42,15 +54,27 @@
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
-            handleFiles(files);
+            setSelectedFile(files[0]);
         }
 
-        function handleFiles(files) {
-            ([...files]).forEach(uploadFile);
+        function setSelectedFile(file) {
+            selectedFile = file;
+            fileNameDiv.textContent = file.name;
+            fileNameDiv.style.display = 'block';
+            removeFileBtn.style.display = 'block';
+            submitButton.disabled = false;
         }
+
+        removeFileBtn.addEventListener('click', function() {
+            selectedFile = null;
+            fileNameDiv.style.display = 'none';
+            removeFileBtn.style.display = 'none';
+            submitButton.disabled = true;
+        });
 
         function uploadFile(file) {
-            let url = 'https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac'; // Your n8n webhook URL
+            if (!file) return;
+            let url = 'https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac';
             let formData = new FormData();
             formData.append('file', file);
 
@@ -66,19 +90,13 @@
             })
             .then(data => {
                 if (data.success) {
-                    downloadButton.style.display = 'block';
+                    // Handle success
                 }
             })
             .catch(error => {
                 console.error('Upload failed:', error);
             });
         }
-
-
-        function downloadProcessedFile() {
-            // Implement download logic here, maybe point to another n8n endpoint to fetch the processed file
-        }
     </script>
 </body>
-
 </html>
