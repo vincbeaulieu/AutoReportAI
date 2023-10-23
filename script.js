@@ -43,7 +43,7 @@ function displayFileIcon() {
 submitBtn.addEventListener('click', () => {
     const formData = new FormData();
     formData.append('file', uploadedFile);
-    fetch('https://vinc.app.n8n.cloud/webhook/1419d5b1-5a0d-4477-a4c9-7500e79a6bac', {
+    fetch('https://vinc.app.n8n.cloud/webhook-test/1419d5b1-5a0d-4477-a4c9-7500e79a6bac', {
         method: 'POST',
         body: formData
     }).then(response => {
