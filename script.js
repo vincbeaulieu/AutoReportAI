@@ -21,17 +21,21 @@ dropArea.addEventListener('drop', (e) => {
     }
 });
 
+
 function displayFileIcon() {
     const fileIcon = document.createElement('div');
     fileIcon.className = 'file-icon';
+    
     const closeIcon = document.createElement('span');
     closeIcon.className = 'close-icon';
     closeIcon.innerText = 'X';
+    
     closeIcon.addEventListener('click', () => {
         uploadedFile = null;
         fileIcon.remove();
         submitBtn.disabled = true;
     });
+    
     fileIcon.appendChild(closeIcon);
     dropArea.appendChild(fileIcon);
 }
